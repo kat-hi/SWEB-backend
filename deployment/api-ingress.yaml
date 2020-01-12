@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: api-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+  - secretName: "ingress-demo-tls"
+    hosts:
+    - "swebapi.demo.ris.beuth-hochschule.de"
+  rules:
+  - host: "swebapi.demo.ris.beuth-hochschule.de"
+    http:
+      paths:
+      - path: 
+        backend:
+          serviceName: swebapi-service
+          servicePort: 5000
+

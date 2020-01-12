@@ -1,0 +1,17 @@
+pymysql
+python-dotenv
+flask
+flask-sqlalchemy
+marshmallow
+marshmallow-sqlalchemy
+flask-marshmallow
+jinja2
+itsdangerous
+flask-api
+PyYAML
+flask_wtf
+flask_login
+simplejson
+Flask-OAuth
+flask_cors
+flask_admin

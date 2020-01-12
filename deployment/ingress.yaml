@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: sweb-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+  - secretName: "ingress-demo-tls"
+    hosts:
+    - "sweb.demo.ris.beuth-hochschule.de"
+  rules:
+  - host: "sweb.demo.ris.beuth-hochschule.de"
+    http:
+      paths:
+      - path: 
+        backend:
+          serviceName: sweb-frontend-service
+          servicePort: 3000
