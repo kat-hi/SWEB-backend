@@ -11,6 +11,7 @@ RUN chmod +x /start/requirements.txt
 RUN pip install -r /start/requirements.txt --no-cache-dir --compile
 
 ENV FLASK_ENV="docker"
+ENV PYTHONUNBUFFERED=1
 
 EXPOSE 5000
 

@@ -1,6 +1,5 @@
+
 *.log
-*configMap*
-*.sql
 config.yaml
 *.pyc
 *.pyo
@@ -15,10 +14,12 @@ secrets.txt
 ./tmp
 ./build/*
 .idea/*
-/venv
+venv/
+venv
+venv/*/*
+.env
+*.pem
 .vscode
 *.iml
 *.xlsx
-.env
-*.sql
-*.cnf
+*.pdf

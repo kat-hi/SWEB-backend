@@ -1,5 +1,7 @@
 import os
+from oauthlib.oauth2 import WebApplicationClient
 
+# .env provides all env-variables that are used by production or development mode
 class Config():
 	DATABASE = {
 		'HOST': os.environ['HOST'],
@@ -9,9 +11,14 @@ class Config():
 	}
 
 	SECRETS = {
-		'GOOGLE_CONSUMER_KEY': os.environ.get('KEY'),
-		'GOOGLE_CONSUMER_SECRET': os.environ.get('SECRET')
+		'GOOGLE_CLIENT_ID': os.environ.get("GOOGLE_CLIENT_ID", None),
+		'GOOGLE_CLIENT_SECRET': os.environ.get("GOOGLE_CLIENT_SECRET", None),
+		'SECRET_KEY': os.environ.get("SECRET_KEY")
+
 	}
+
+	CLIENT = WebApplicationClient(SECRETS['GOOGLE_CLIENT_ID'])
+	GOOGLE_DISCOVERY_URL = "https://accounts.google.com/.well-known/openid-configuration"
 
 	from main import app
 	app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
@@ -28,11 +35,6 @@ class Production(Config):
 		'PASSWORD': os.environ['MYSQL_PASSWORD'],
 		'DBNAME': os.environ['MYSQL_DATABASE'],
 		'PORT': os.environ['MYSQL_PORT']
-	}
-
-	SECRETS = {
-		'GOOGLE_CONSUMER_KEY': os.environ['KEY'],
-		'GOOGLE_CONSUMER_SECRET': os.environ['SECRET']
 	}
 
 	from main import app
