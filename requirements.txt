@@ -1,6 +1,9 @@
 pymysql
-python-dotenv
 flask
+Werkzeug
+requests
+oauthlib==3.0.1
+Flask-Login==0.4.1
 flask-sqlalchemy
 marshmallow
 marshmallow-sqlalchemy
@@ -8,10 +11,9 @@ flask-marshmallow
 jinja2
 itsdangerous
 flask-api
-PyYAML
 flask_wtf
-flask_login
 simplejson
 Flask-OAuth
 flask_cors
 flask_admin
+python-dotenv
