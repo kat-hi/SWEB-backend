@@ -11,14 +11,15 @@ class Config():
 	}
 
 	SECRETS = {
-		'GOOGLE_CLIENT_ID': os.environ.get("GOOGLE_CLIENT_ID", None),
-		'GOOGLE_CLIENT_SECRET': os.environ.get("GOOGLE_CLIENT_SECRET", None),
-		'SECRET_KEY': os.environ.get("SECRET_KEY")
-
+		'GOOGLE_CLIENT_ID': os.environ.get('GOOGLE_CLIENT_ID', None),
+		'GOOGLE_CLIENT_SECRET': os.environ.get('GOOGLE_CLIENT_SECRET', None),
+		'SECRET_KEY': os.environ.get("SECRET_KEY"),
+		'GOOGLE_API_KEY': os.environ.get('GOOGLE_API_KEY')
 	}
 
+	ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL')
 	CLIENT = WebApplicationClient(SECRETS['GOOGLE_CLIENT_ID'])
-	GOOGLE_DISCOVERY_URL = "https://accounts.google.com/.well-known/openid-configuration"
+	GOOGLE_DISCOVERY_URL = 'https://accounts.google.com/.well-known/openid-configuration'
 
 	from main import app
 	app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
