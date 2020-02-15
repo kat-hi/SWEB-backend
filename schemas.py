@@ -19,4 +19,4 @@ class Treecoordinates(MA.TableSchema):
 
 class Admin(MA.TableSchema):
 	class Meta:
-		fields = ("id", "username", "password")
+		fields = ("id", "email")
