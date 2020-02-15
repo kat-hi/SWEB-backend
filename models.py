@@ -1,6 +1,7 @@
 from main import DB
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy import create_engine
+from flask_login import UserMixin
 
 Base = automap_base()
 Base.prepare(DB.engine, reflect=True)
@@ -73,4 +74,33 @@ Paten = Base.classes.paten
 | kommentar      | varchar(255) | YES  |     
 '''
 
+
+class Admin(DB.Model, UserMixin):
+	__tablename__ = 'admins'
+	id = DB.Column(DB.String, primary_key=False)
+	email = DB.Column(DB.String, primary_key=True)
+	authenticated = DB.Column(DB.String, default="false")
+	active = DB.Column(DB.String, default="true")
+
+
+def is_active(self):
+	"""True, as all users are active."""
+	if self.active == "true":
+		return True
+
+
+def get_id(self):
+	"""Return the email address to satisfy Flask-Login's requirements."""
+	return self.email
+
+
+def is_authenticated(self):
+	"""Return True if the user is authenticated."""
+	if self.authenticated == "true":
+		return True
+
+
+def is_anonymous(self):
+	"""False, as anonymous users aren't supported."""
+	return False
 
