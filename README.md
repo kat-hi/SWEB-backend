@@ -15,9 +15,9 @@ sudo docker-compose up
 on linux
 ```
 cd api
-export FLASK_ENV=dev
 source venv/bin/activate
 source .env
+export FLASK_ENV=dev
 flask run
 ```
 
