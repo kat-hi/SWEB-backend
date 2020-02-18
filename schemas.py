@@ -16,6 +16,9 @@ class Treecoordinates(MA.TableSchema):
 	class Meta:
 		fields = ("id", "longitude", "latitude")
 
+class Paten(MA.TableSchema):
+	class Meta:
+		fields = ("id", "patenid", "baumID")
 
 class Admin(MA.TableSchema):
 	class Meta:
