@@ -7,11 +7,11 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_cors import CORS
 
+
 DB = SQLAlchemy()
 MA = Marshmallow()
 admin = Admin()
 login_manager = LoginManager()
-
 
 def create_app():
 	app = Flask('__main__')
@@ -25,16 +25,13 @@ def create_app():
 
 def set_environment():
 	app.app_context().push()
+	from config import Config
 	if os.environ['FLASK_ENV'] == 'dev':
-		config_settings = Config()
-		app.config.from_object(config_settings)  # get development config settings
-		app.config['SQLALCHEMY_DATABASE_URI'] = config_settings.SQLALCHEMY_DATABASE_URI
-		print(config_settings.SQLALCHEMY_DATABASE_URI)
+		app.config.from_object('config.Config')
+		print(app.config['SQLALCHEMY_DATABASE_URI'])
 	else:
-		config_settings = Production()
-		app.config.from_object(config_settings)  # get production config settings
-		app.config['SQLALCHEMY_DATABASE_URI'] = config_settings.SQLALCHEMY_DATABASE_URI
-		print(config_settings.SQLALCHEMY_DATABASE_URI)
+		app.config.from_object('config.Production')
+		print(app.config['SQLALCHEMY_DATABASE_URI'])
 	app.secret_key = Config.SECRETS['SECRET_KEY']
 
 
@@ -50,10 +47,10 @@ def create_tables():
 app = create_app()
 app.app_context().push()
 
-from config import Config, Production
 set_environment()
-create_tables()
 logging.basicConfig(level=logging.DEBUG)
+
+create_tables()
 
 from login import admin_login
 from api import api
