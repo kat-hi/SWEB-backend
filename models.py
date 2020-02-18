@@ -1,16 +1,31 @@
 from main import DB
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy import create_engine
 from flask_login import UserMixin
+from sqlalchemy import create_engine
 
 Base = automap_base()
 Base.prepare(DB.engine, reflect=True)
 
 from main import app
-engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], pool_pre_ping=True)
+app.app_context().push()
+engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], pool_pre_ping=True, pool_size=5)
+engine.connect()
 app.app_context().push()
 
-Pflanzliste = Base.classes.pflanzliste
+# Pflanzliste = Base.classes.pflanzliste # automap
+class Pflanzliste(DB.Model):
+	__tablename__ = 'pflanzliste'
+	id = DB.Column(DB.Integer, primary_key=True)
+	reihenID = DB.Column(DB.Integer)
+	reihenPos = DB.Column(DB.Integer)
+	baumID = DB.Column(DB.Integer)
+	baumsortenID = DB.Column(DB.Integer)
+	fruchtID = DB.Column(DB.Integer)
+	sortenID = DB.Column(DB.Integer)
+	sorte = DB.Column(DB.String)
+	longitude = DB.Column(DB.Float)
+	latitude = DB.Column(DB.Float)
+	pate = DB.Column(DB.String)
 
 '''
 | id           | int(11)      | PRI   
@@ -26,7 +41,24 @@ Pflanzliste = Base.classes.pflanzliste
 | latitude     | double       |
 | pate         | varchar(100) |
 '''
-Sorten = Base.classes.obstsorten
+
+#Sorten = Base.classes.obstsorten # automap
+class Sorten(DB.Model):
+	__tablename__ = 'obstsorten'
+	id = DB.Column(DB.Integer, primary_key=True)
+	fruchtID = DB.Column(DB.Integer)
+	frucht = DB.Column(DB.String)
+	sorte = DB.Column(DB.String)
+	andereNamen = DB.Column(DB.String)
+	herkunft = DB.Column(DB.String)
+	groesse = DB.Column(DB.String)
+	beschreibung = DB.Column(DB.String)
+	reifezeit = DB.Column(DB.String)
+	geschmack = DB.Column(DB.String)
+	verwendung = DB.Column(DB.String)
+	lager = DB.Column(DB.String)
+	verbreitung = DB.Column(DB.String)
+
 '''
 | id           | int(11)      | PRI  
 | fruchtID     | int(11)      |
@@ -43,7 +75,7 @@ Sorten = Base.classes.obstsorten
 | verbreitung  | varchar(255) |
 '''
 
-Paten = Base.classes.paten
+Paten = Base.classes.paten # automap
 
 '''
 +----------------+--------------+------+-----+
