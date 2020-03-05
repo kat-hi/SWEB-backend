@@ -16,7 +16,6 @@ def get_google_provider_cfg():
 	return requests.get(Config.LOGIN['GOOGLE_DISCOVERY_URL']).json()
 
 
-
 @login_manager.user_loader
 def user_loader(id):
 	from models import Admin
@@ -24,13 +23,14 @@ def user_loader(id):
 	user = Admin.query.get(users_email)
 	return user
 
-
+# this function is to associate the user_id in the cookie with the actual user object
+# user_id is the user_id from the cookies that is created when a user logs in.
 @login_manager.user_loader
-def load_user(id):
+def load_user(user_id):
 	global users_email
 	from models import Admin
 	from main import DB, app
-	app.logger.info('LOAD USER, SHOW EMAIL: ' + str(id))
+	app.logger.info('LOAD USER, SHOW EMAIL: ' + str(user_id))
 	user = DB.session.query(Admin).get(users_email)
 	return user
 
@@ -51,19 +51,28 @@ def flask_user_authentication(users_email):
 		return False
 
 
-@admin_login.route('/api/admin')
+@admin_login.route('/')
+def root():
+	print('TEST')
+	print(request.url)
+	print(request.base_url)
+	if str(request.url) == 'http://admin.stark-wie-ein-baum.de/' or str(request.url) == 'https://admin.stark-wie-ein-baum.de/':
+		return redirect('https://admin.stark-wie-ein-baum.de/app/admin')
+	else:
+		pass
+
+@admin_login.route('/app/admin')
 def admin_home():
 	from main import app
 	if current_user.is_authenticated:
 		app.logger.info('current user: ' + str(current_user))
 		return "<p>Du bist eingeloggt!</p>"
 	else:
-		return '<a class="button" href="/api/admin/login">Google Login</a>'
+		return '<a class="button" href="/app/admin/login">Google Login</a>'
 
 
-@admin_login.route('/api/admin/login')
+@admin_login.route('/app/admin/login')
 def google_login():
-	from main import app
 	# auth-endpoint contains URL to instantiate the OAuth2 flow with Google from this client app
 	google_provider_cfg = get_google_provider_cfg()
 	authorization_endpoint = google_provider_cfg["authorization_endpoint"]
@@ -75,7 +84,7 @@ def google_login():
 	return redirect(request_uri)
 
 
-@admin_login.route("/api/admin/login/callback")
+@admin_login.route("/app/admin/login/callback")
 def callback():
 	global users_email
 	from main import app
@@ -109,7 +118,7 @@ def callback():
 	app.logger.info('GOT USER DATA from /callback: ' + unique_id + ' ' + users_email + ' ' + users_name)
 
 	if flask_user_authentication(users_email):
-		return redirect('https://demo.datexis.com/admin')
+		return redirect('https://admin.stark-wie-ein-baum.de/admin')
 	else:
 		return "Sorry. You're Email is not valid.", 400
 
@@ -117,11 +126,10 @@ def callback():
 @admin_login.route("/test")
 @login_required
 def get_user_data():
-	from main import app
-	return '<a class="button" href="/api/admin/logout">Logout</a>'
+	return '<a class="button" href="/app/admin/logout">Logout</a>'
 
 
-@admin_login.route("/logout")
+@admin_login.route("/app/admin/logout")
 @login_required
 def logout():
 	from main import DB, app
@@ -131,4 +139,4 @@ def logout():
 	DB.session.add(admin)
 	DB.session.commit()
 	logout_user()
-	return redirect('https://demo.datexis.com/api/admin')
+	return redirect('https://admin.stark-wie-ein-baum.de/app/admin')
