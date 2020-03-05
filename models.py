@@ -21,6 +21,7 @@ class Pflanzliste(DB.Model):
 	baumID = DB.Column(DB.Integer)
 	baumsortenID = DB.Column(DB.Integer)
 	fruchtID = DB.Column(DB.Integer)
+	frucht = DB.Column(DB.String)
 	sortenID = DB.Column(DB.Integer)
 	sorte = DB.Column(DB.String)
 	longitude = DB.Column(DB.Float)
