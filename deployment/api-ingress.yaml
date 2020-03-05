@@ -7,11 +7,11 @@ metadata:
     kubernetes.io/ingress.class: nginx
 spec:
   tls:
-  - secretName: "ingress-demo-tls"
+  - secretName: "real-ingress-demo-tls"
     hosts:
-    - "swebapi.demo.ris.beuth-hochschule.de"
+    - "swebapi.demo.datexis.com"
   rules:
-  - host: "swebapi.demo.ris.beuth-hochschule.de"
+  - host: "swebapi.demo.datexis.com"
     http:
       paths:
       - path: 

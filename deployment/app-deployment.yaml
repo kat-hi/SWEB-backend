@@ -4,7 +4,7 @@ metadata:
   name: sweb-frontend
   namespace: sachs
 spec:
-  replicas: 2
+  replicas: 1 
   strategy:
   template:
     metadata:
@@ -12,7 +12,7 @@ spec:
         app: sweb-frontend
     spec:
       containers:
-        - image: registry.datexis.com/ksachs/sweb-frontend
+        - image: registry.datexis.com/ksachs/sweb-frontend:v37
           name: sweb-frontend
           ports:
             - name: client-port
