@@ -1,18 +1,22 @@
 # Stark-Wie-Ein-Baum
 
-**Homepage Hof Grüneberg**<br>
+### URL zur App
+https://app.stark-wie-ein-baum.de
+
+
+**Projektpartner: Stiftung Hof Grüneberg**<br>
 https://www.hof-grueneberg.de/stiftung/stiftung-hof-grueneberg/
 
-### server
-## starting in production mode
+
+### docker-compose
 ```
 sudo docker-compose build
 sudo docker-compose up
 ```
 
-## starting in dev mode
-
+## starting in dev mode with virtualenv
 on linux
+
 ```
 cd api
 source venv/bin/activate
@@ -23,10 +27,3 @@ flask run
 
 The flask-server runs on http://127.0.0.1:5000
 
-### frontend
-
-```
-yarn start
-```
-
-Frontend runs on https://127.0.0.1:3000
