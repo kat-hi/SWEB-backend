@@ -7,7 +7,6 @@ services:
       test: "exit 0"
     restart: always
     volumes:
-      - /var/lib/mysql
       - ./mysql_init.sql:/docker-entrypoint-initdb.d/mysql_init.sql
     env_file: 
       - .env
