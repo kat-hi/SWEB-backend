@@ -15,8 +15,8 @@ login_manager = LoginManager()
 
 def create_app():
 	app = Flask('__main__')
-	DB.init_app(app)  # initialize SQLAlchemy
-	MA.init_app(app)  # initialize Marshmallow
+	DB.init_app(app)
+	MA.init_app(app)
 	admin.init_app(app)
 	login_manager.init_app(app)
 	CORS(app)
