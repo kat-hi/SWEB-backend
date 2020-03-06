@@ -1,7 +1,7 @@
 import simplejson
 from flask import request, Blueprint
 from flask_cors import cross_origin
-from flask import jsonify, redirect
+from flask import jsonify
 import json
 
 api = Blueprint('api', __name__)
@@ -35,6 +35,7 @@ def infos():
 				app.logger.info('BAUM IN PATE: ' + str(tree['baumID']))
 				tree["pate"] = "true"
 	return simplejson.dumps(trees_output, ensure_ascii=False, encoding='utf8')
+
 
 @api.route('/api/karte/baeume', methods=['GET'])
 @cross_origin()
@@ -89,9 +90,8 @@ def get_properties():
 	schema = schemas.Sorten(many=True)
 	output = schema.dump(sorten_results)
 	return simplejson.dumps(output, ensure_ascii=False, encoding='utf8')
-	# join = DB.session.query(models.Pflanzliste, models.Sorten).join(models.Sorten).join(models.Pflanzliste)
 
-# TODO
+
 @api.route('/api/kontakt', methods=['POST'])
 @cross_origin()
 def fetch_contact_information():
