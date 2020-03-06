@@ -1,7 +1,6 @@
 # Stark-Wie-Ein-Baum
-
-### URL zur App
 https://app.stark-wie-ein-baum.de
+
 
 
 **Projektpartner: Stiftung Hof Grüneberg**<br>
