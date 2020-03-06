@@ -4,7 +4,7 @@
 - **app-ingress** | exposing the app via app.stark-wie-ein-baum.de
 
 ## Api
-- **api-config.yaml** # configMap with environment variables 
+- **api-config.yaml** # configMap with environment variables and secrets
 - **api-deployment.yaml** # running backend replicas on k8s
 - **api-service.yaml** # providing stable IP-address for all pods inside the cluster
 - **api-ingress.yaml** # making the api accessible
