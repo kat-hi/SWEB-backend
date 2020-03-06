@@ -1,3 +1,4 @@
+# calculating coordinates of the trees
 import math
 
 def calc_row(lat, long, number_of_trees, n):

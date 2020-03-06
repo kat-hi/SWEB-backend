@@ -23,7 +23,6 @@ with connect.cursor() as cursor:
 	paten_query = "INSERT INTO paten(id, patenid, name, vorname, eintragUrkunde, mitpaten, firma, adresse, plz, ort, tel, email, patenbaum, entscheidung, " \
 	              "start, ende, baumId, urkunde, followUp, foto, zahlart, zahlfrequenz, zahlbeginn, zahlende, quelle, kommentar) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 
-
 	with open('/home/kat/Documents/DEVprojects/projects/sweb/test/Patendaten-sample.csv') as table:
 		reader = csv.reader(table)
 		for row in reader:
