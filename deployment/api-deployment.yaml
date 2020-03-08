@@ -6,7 +6,7 @@ metadata:
     app: sweb-backend
     tier: api
 spec:
-  replicas: 1
+  replicas: 5
   template:
     metadata:
       labels:

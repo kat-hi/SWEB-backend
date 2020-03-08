@@ -4,7 +4,7 @@ metadata:
   name: sweb-frontend
   namespace: sachs
 spec:
-  replicas: 1 
+  replicas: 2 
   strategy:
   template:
     metadata:
