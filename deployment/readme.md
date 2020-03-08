@@ -15,4 +15,4 @@
 ## Database
 - **mysql-deployment.yaml** # running mysql-instance on k8s
 - **mysql-service.yaml** # providing stable IP-address inside the cluster
-- **mysql-pvc.yaml** # using persistant storage for safety reasons. volume is mounted inside the mysql-pod
+- **mysql-pvc.yaml** # using persistant storage. volume is mounted inside the mysql-pod
