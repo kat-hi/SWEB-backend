@@ -1,44 +1,41 @@
 import simplejson
 from flask import request, Blueprint
-from flask_cors import cross_origin
 from flask import jsonify
 import json
-
+import requests
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+import re
 api = Blueprint('api', __name__)
+from main import app
 
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=["5 per minute", "30 per day"],
+)
 
 @api.route('/api', methods=['GET'])
-@cross_origin()
 def index():
 	response = jsonify({'json sagt': 'Hallo i bims. der json.'})
 	return response
 
 
 @api.route('/api/karte', methods=['GET'])
-@cross_origin()
+@limiter.exempt
 def infos():
-	from main import DB, app
+	from main import DB
 	import models, schemas
 
 	tree_results = DB.session.query(models.Pflanzliste).all()
 	tree_schema = schemas.Tree(many=True)
 	trees_output = tree_schema.dump(tree_results)
 
-	paten_results = DB.session.query(models.Paten).all()
-	paten_schema = schemas.Paten(many=True)
-	paten_output = paten_schema.dump(paten_results)
-
-	for tree in trees_output:
-		for pate in paten_output:
-			app.logger.info('BAUMID: ' + str(tree['baumID']) + ' and PATENVALUES: ' + str(pate.values()))
-			if str(tree["baumID"]) in pate.values():
-				app.logger.info('BAUM IN PATE: ' + str(tree['baumID']))
-				tree["pate"] = "true"
 	return simplejson.dumps(trees_output, ensure_ascii=False, encoding='utf8')
 
 
 @api.route('/api/karte/baeume', methods=['GET'])
-@cross_origin()
+@limiter.exempt
 def get_trees():
 	from main import DB
 	import models, schemas
@@ -49,7 +46,7 @@ def get_trees():
 
 
 @api.route('/api/karte/baeume/<id>', methods=['GET'])
-@cross_origin()
+@limiter.exempt
 def get_tree(id):
 	import schemas, models
 	from main import DB
@@ -60,7 +57,7 @@ def get_tree(id):
 
 
 @api.route('/api/karte/baeume/koordinaten', methods=['GET'])
-@cross_origin()
+@limiter.exempt
 def get_coordinates():
 	import schemas, models
 	from main import DB
@@ -71,7 +68,7 @@ def get_coordinates():
 
 
 @api.route('/api/karte/baeume/<id>/koordinaten', methods=['GET'])
-@cross_origin()
+@limiter.exempt
 def get_coordinates_of_tree(id):
 	import schemas, models
 	from main import DB
@@ -82,25 +79,38 @@ def get_coordinates_of_tree(id):
 
 
 @api.route('/api/karte/baeume/properties', methods=['GET'])
-@cross_origin()
-def get_properties():
+@limiter.exempt
+def get_imagelinks():
 	import schemas, models
 	from main import DB
-	sorten_results = DB.session.query(models.Sorten).all()
-	schema = schemas.Sorten(many=True)
-	output = schema.dump(sorten_results)
-	return simplejson.dumps(output, ensure_ascii=False, encoding='utf8')
+	image_results = DB.session.query(models.Image).all()
+	image_schema = schemas.Image(many=True)
+	image_output = image_schema.dump(image_results)
+	app.logger.info(str(image_output))
+
+	checked_files = []
+	base_download_url = 'https://my.hidrive.com/api/sharelink/download?id='
+	for image in image_output:
+		regex='lnk/[\w]*'
+		image_id = re.search(regex, image['uri']).group().split('lnk/')[1]
+		response = requests.head(base_download_url+image_id)
+		if response.status_code is 200 and (response.headers['Content-Type'] == 'image/png' or response.headers['Content-Type'] == 'image/jpeg'):
+			app.logger.info(str(response))
+			checked_files.append(base_download_url+image_id)
+	return jsonify({'data': checked_files})
 
 
 @api.route('/api/kontakt', methods=['POST'])
-@cross_origin()
 def fetch_contact_information():
 	from mail import log_into_SMTP_Server_and_send_email
 	response = json.loads(request.data.decode('utf-8'))
 	email = response['email']
 	lastname = response['lastName']
-	address = response['address']
+	streetaddress = response['streetAddress']
+	cityaddress = response['cityAddress']
 	message = response['message']
 	firstname = response['firstName']
-	log_into_SMTP_Server_and_send_email(firstname, lastname, email, address, message)
+	phone = response['phone']
+	app.logger.info(email + ' ' + lastname+ ' ' + firstname+ ' ' + cityaddress+ ' ' + streetaddress+ ' ' + message+ ' ' + str(phone))
+	log_into_SMTP_Server_and_send_email(firstname, lastname, email, phone, streetaddress, cityaddress, message)
 	return '', 200
