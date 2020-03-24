@@ -53,9 +53,6 @@ def flask_user_authentication(users_email):
 
 @admin_login.route('/')
 def root():
-	print('TEST')
-	print(request.url)
-	print(request.base_url)
 	if str(request.url) == 'http://admin.stark-wie-ein-baum.de/' or str(request.url) == 'https://admin.stark-wie-ein-baum.de/':
 		return redirect('https://admin.stark-wie-ein-baum.de/app/admin')
 	else:
@@ -66,7 +63,7 @@ def admin_home():
 	from main import app
 	if current_user.is_authenticated:
 		app.logger.info('current user: ' + str(current_user))
-		return "<p>Du bist eingeloggt!</p>"
+		return redirect('https://admin.stark-wie-ein-baum.de/admin')
 	else:
 		return '<a class="button" href="/app/admin/login">Google Login</a>'
 
@@ -121,12 +118,6 @@ def callback():
 		return redirect('https://admin.stark-wie-ein-baum.de/admin')
 	else:
 		return "Sorry. You're Email is not valid.", 400
-
-
-@admin_login.route("/test")
-@login_required
-def get_user_data():
-	return '<a class="button" href="/app/admin/logout">Logout</a>'
 
 
 @admin_login.route("/app/admin/logout")
