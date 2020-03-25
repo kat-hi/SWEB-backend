@@ -5,8 +5,8 @@ from flask_marshmallow import Marshmallow
 from flask_admin import Admin
 from flask import Flask
 from flask_login import LoginManager
-from flask_cors import CORS
 
+#from admin import IndexView
 
 DB = SQLAlchemy()
 MA = Marshmallow()
@@ -15,11 +15,10 @@ login_manager = LoginManager()
 
 def create_app():
 	app = Flask('__main__')
-	DB.init_app(app)
-	MA.init_app(app)
+	DB.init_app(app)  # initialize SQLAlchemy
+	MA.init_app(app)  # initialize Marshmallow
 	admin.init_app(app)
 	login_manager.init_app(app)
-	CORS(app)
 	return app
 
 
@@ -38,10 +37,10 @@ def set_environment():
 def create_tables():
 	app.app_context().push()
 	import models
-	from admin import pflanzlistetable, obstsortentable, patentable
+	from admin import pflanzlistetable, obstsortentable, imagetable
+	admin.add_view(imagetable(models.Image, DB.session))
 	admin.add_view(pflanzlistetable(models.Pflanzliste, DB.session))
 	admin.add_view(obstsortentable(models.Sorten, DB.session))
-	admin.add_view(patentable(models.Paten, DB.session))
 
 
 app = create_app()
