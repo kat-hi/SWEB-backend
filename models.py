@@ -11,21 +11,23 @@ app.app_context().push()
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], pool_pre_ping=True, pool_size=5)
 engine.connect()
 
-
+# Pflanzliste = Base.classes.pflanzliste # automap
 class Pflanzliste(DB.Model):
 	__tablename__ = 'pflanzliste'
-	id = DB.Column(DB.Integer, primary_key=True)
-	reihenID = DB.Column(DB.Integer)
-	reihenPos = DB.Column(DB.Integer)
-	baumID = DB.Column(DB.Integer)
-	baumsortenID = DB.Column(DB.Integer)
-	fruchtID = DB.Column(DB.Integer)
-	frucht = DB.Column(DB.String)
-	sortenID = DB.Column(DB.Integer)
-	sorte = DB.Column(DB.String)
-	longitude = DB.Column(DB.Float)
-	latitude = DB.Column(DB.Float)
-	pate = DB.Column(DB.String)
+	BaumNr = DB.Column(DB.Integer, primary_key=True)
+	Pflanzreihe = DB.Column(DB.Integer)
+	PflanzreihePosition = DB.Column(DB.Integer)
+	BaumID = DB.Column(DB.Integer)
+	BaumsortenID = DB.Column(DB.Integer)
+	FruchtID = DB.Column(DB.Integer)
+	Frucht = DB.Column(DB.String)
+	SortenID = DB.Column(DB.Integer)
+	Sortenzaehler = DB.Column(DB.Integer)
+	Sorte = DB.Column(DB.String)
+	Ernte = DB.Column(DB.Float)
+	PatenID = DB.Column(DB.String)
+	Longitude = DB.Column(DB.Float)
+	Latitude = DB.Column(DB.Float)
 
 
 class Sorten(DB.Model):
@@ -44,8 +46,6 @@ class Sorten(DB.Model):
 	lager = DB.Column(DB.String)
 	verbreitung = DB.Column(DB.String)
 
-Paten = Base.classes.paten # automap
-
 
 class Admin(DB.Model, UserMixin):
 	__tablename__ = 'admins'
@@ -53,6 +53,12 @@ class Admin(DB.Model, UserMixin):
 	email = DB.Column(DB.String, primary_key=True)
 	authenticated = DB.Column(DB.String, default="false")
 	active = DB.Column(DB.String, default="true")
+
+
+class Image(DB.Model):
+	__tablename__ = 'Bilder'
+	id = DB.Column(DB.Integer, primary_key=True)
+	uri = DB.Column(DB.String)
 
 
 def is_active(self):
