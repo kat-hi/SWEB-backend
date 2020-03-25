@@ -3,7 +3,7 @@ from main import MA
 
 class Tree(MA.TableSchema):
 	class Meta:
-		fields = ("id", "baumID", "sortenID", "sorte", "frucht", "sorte", "longitude", "latitude", "pate")
+		fields = ("BaumNr", "BaumID", "Pflanzreihe", "PflanzreihePosition", "SortenID", "Sorte", "Frucht", "PatenID", "Longitude", "Latitude")
 
 
 class Sorten(MA.TableSchema):
@@ -14,12 +14,14 @@ class Sorten(MA.TableSchema):
 
 class Treecoordinates(MA.TableSchema):
 	class Meta:
-		fields = ("id", "longitude", "latitude")
+		fields = ("BaumNr", "Longitude", "Latitude")
 
-class Paten(MA.TableSchema):
-	class Meta:
-		fields = ("id", "patenid", "baumID")
 
 class Admin(MA.TableSchema):
 	class Meta:
 		fields = ("id", "email")
+
+
+class Image(MA.TableSchema):
+	class Meta:
+		fields = ("id", "uri")
