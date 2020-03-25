@@ -2,7 +2,6 @@
 https://app.stark-wie-ein-baum.de
 
 
-
 **Projektpartner: Stiftung Hof Grüneberg**<br>
 https://www.hof-grueneberg.de/stiftung/stiftung-hof-grueneberg/
 
@@ -33,4 +32,9 @@ flask run
 ```
 
 The flask-server runs on http://127.0.0.1:5000
+
+### note
+this repo is a copy of our private project.
+
+frontend developer: wkrl
 
