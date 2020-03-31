@@ -12,7 +12,7 @@ from main import app
 limiter = Limiter(
     app,
     key_func=get_remote_address,
-    default_limits=["5 per minute", "30 per day"],
+	default_limits=['50 per day']
 )
 
 @api.route('/api', methods=['GET'])
@@ -83,13 +83,14 @@ def get_coordinates_of_tree(id):
 def get_imagelinks():
 	import schemas, models
 	from main import DB
+	from config import Config
 	image_results = DB.session.query(models.Image).all()
 	image_schema = schemas.Image(many=True)
 	image_output = image_schema.dump(image_results)
 	app.logger.info(str(image_output))
 
 	checked_files = []
-	base_download_url = 'https://my.hidrive.com/api/sharelink/download?id='
+	base_download_url = Config.IMAGE_BASE_URL
 	for image in image_output:
 		regex='lnk/[\w]*'
 		image_id = re.search(regex, image['uri']).group().split('lnk/')[1]
@@ -104,13 +105,13 @@ def get_imagelinks():
 def fetch_contact_information():
 	from mail import log_into_SMTP_Server_and_send_email
 	response = json.loads(request.data.decode('utf-8'))
-	email = response['email']
-	lastname = response['lastName']
-	streetaddress = response['streetAddress']
-	cityaddress = response['cityAddress']
-	message = response['message']
-	firstname = response['firstName']
-	phone = response['phone']
-	app.logger.info(email + ' ' + lastname+ ' ' + firstname+ ' ' + cityaddress+ ' ' + streetaddress+ ' ' + message+ ' ' + str(phone))
+	email = str(response['email'])
+	lastname = str(response['lastName'])
+	streetaddress = str(response['streetAddress'])
+	cityaddress = str(response['cityAddress'])
+	message = str(response['message'])
+	firstname = str(response['firstName'])
+	phone = str(response['phone'])
+	app.logger.info('API INFO: ' + email + ' ' + lastname+ ' ' + firstname + ' ' + cityaddress + ' ' + streetaddress+ ' ' + message + ' ' + phone)
 	log_into_SMTP_Server_and_send_email(firstname, lastname, email, phone, streetaddress, cityaddress, message)
 	return '', 200
