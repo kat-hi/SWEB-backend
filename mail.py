@@ -11,14 +11,14 @@ RECEIVER = Config.SMTP['RECEIVER']
 PASSWORD = Config.SMTP['PASSWORD']
 from main import app
 
-def plain_text_mail(firstname, lastname, email, phone, streetaddress, cityaddress, user_message):
-	app.logger.info('PLAINTEXT: ' + firstname+ ' ' +lastname+ ' ' + email+ ' ' +str(phone) + ' ' + streetaddress + ' ' + cityaddress+ ' ' + user_message)
-	return 'Absender:\n' + firstname + ' ' + lastname + '\n' + streetaddress + '\n' + cityaddress + '\n' + email + '\n' + 'Tel: ' + str(phone) + '\n\n' + 'Nachricht:\n' + user_message
 
+def plain_text_mail(firstname, lastname, email, phone, streetaddress, cityaddress, user_message):
+	app.logger.info('PLAINTEXT: ' + firstname + ' ' + lastname + ' ' + email+ ' ' + phone + ' ' + streetaddress + ' ' + cityaddress+ ' ' + user_message)
+	return 'Absender:\n' + firstname + ' ' + lastname + '\n' + streetaddress + '\n' + cityaddress + '\n' + email + '\n' + 'Tel: ' + phone + '\n\n' + 'Nachricht:\n' + user_message
 
 
 def log_into_SMTP_Server_and_send_email(firstname, lastname, email, phone, streetaddress, cityaddress, user_message):
-	app.logger.info('LOGINTO: ' + firstname + ' ' + lastname + ' ' + email + ' ' + str(phone)+ ' ' + streetaddress + ' ' +cityaddress+ ' ' +user_message)
+	app.logger.info('LOGINTO: ' + firstname + ' ' + lastname + ' ' + email + ' ' + phone + ' ' + streetaddress + ' ' +cityaddress+ ' ' +user_message)
 
 	message = MIMEMultipart("alternative")
 	message["Subject"] = "Anfrage: Baumpatenschaft"
