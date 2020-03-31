@@ -30,6 +30,7 @@ class Config():
 		'PASSWORD': os.environ['SMTP_PASSWORD']
 	}
 
+	IMAGE_BASE_URL = os.environ['IMAGE_BASE_URL']
 
 	from main import app
 	app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
