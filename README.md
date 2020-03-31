@@ -36,5 +36,5 @@ The flask-server runs on http://127.0.0.1:5000
 ### note
 this repo is a copy of our private project.
 
-frontend developer: wkrl
+frontend developer: wkrl (https://github.com/wkrl/Stark-Wie-Ein-Baum)
 
