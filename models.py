@@ -11,7 +11,7 @@ app.app_context().push()
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], pool_pre_ping=True, pool_size=5)
 engine.connect()
 
-# Pflanzliste = Base.classes.pflanzliste # automap
+
 class Pflanzliste(DB.Model):
 	__tablename__ = 'pflanzliste'
 	BaumNr = DB.Column(DB.Integer, primary_key=True)
