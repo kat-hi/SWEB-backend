@@ -1,6 +1,7 @@
 import os
 from oauthlib.oauth2 import WebApplicationClient
 
+
 class Config():
 	DATABASE = {
 		'HOST': os.environ['HOST'],
@@ -19,7 +20,8 @@ class Config():
 		'ADMIN_EMAIL_1': os.environ['ADMIN_EMAIL_1'],
 		'ADMIN_EMAIL_2': os.environ['ADMIN_EMAIL_2'],
 		'CLIENT': WebApplicationClient(SECRETS['GOOGLE_CLIENT_ID']),
-		'GOOGLE_DISCOVERY_URL': 'https://accounts.google.com/.well-known/openid-configuration'
+		'GOOGLE_DISCOVERY_URL': os.environ['GOOGLE_DISCOVERY_URL'],
+		'ADMIN_BASE_URL': os.environ['ADMIN_BASE_URL']
 	}
 
 	SMTP = {
@@ -51,6 +53,5 @@ class Production(Config):
 
 	from main import app
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # disable signal to application when a change is made in database
-	app.config['SQLALCHEMY_ECHO'] = True  # debugging purpose
 	SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + DATABASE['USER'] + ':' + DATABASE['PASSWORD'] + '@' \
 	                                        + DATABASE['HOST'] + ':' + DATABASE['PORT'] + '/' + DATABASE['DBNAME']
