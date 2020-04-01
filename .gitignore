@@ -1,6 +1,6 @@
 *.sql
 *.log
-config.yaml
+*config.yaml
 *.pyc
 *.pyo
 __pycache__
