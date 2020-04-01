@@ -26,7 +26,6 @@ def log_into_SMTP_Server_and_send_email(firstname, lastname, email, phone, stree
 	message["To"] = RECEIVER
 	part1 = MIMEText(plain_text_mail(firstname, lastname, email, phone, cityaddress, streetaddress, user_message), "plain")
 	message.attach(part1)
-	app.logger.info(str(part1))
 	context = ssl.create_default_context()
 
 	try:
