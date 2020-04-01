@@ -2,7 +2,7 @@
 FROM python:3.6
 
 # install requirements
-COPY sweb_backend /start/
+COPY . /start/
 
 WORKDIR start
 
