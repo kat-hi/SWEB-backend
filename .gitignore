@@ -1,4 +1,4 @@
-
+*.sql
 *.log
 config.yaml
 *.pyc
