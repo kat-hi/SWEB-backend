@@ -1,14 +1,15 @@
 from flask_login import (current_user, login_required, login_user, logout_user)
 import requests
-from config import Config
 from flask import request, redirect, Blueprint
 import json
 
 admin_login = Blueprint('admin_login', __name__)
-
+from config import Config
 from main import login_manager
 
-users_email = ""
+
+USERS_EMAIL = ""
+ADMIN_BASE_URL = Config.LOGIN['ADMIN_BASE_URL']
 
 # TODO HttpError handling
 # getting the provider configuration document
@@ -17,21 +18,23 @@ def get_google_provider_cfg():
 
 
 @login_manager.user_loader
-def user_loader(id):
+def user_loader():
 	from models import Admin
-	global users_email
-	user = Admin.query.get(users_email)
+	global USERS_EMAIL
+	from main import app
+	app.logger.info('TEST USER_LOADER')
+	user = Admin.query.get(USERS_EMAIL)
 	return user
 
 # this function is to associate the user_id in the cookie with the actual user object
 # user_id is the user_id from the cookies that is created when a user logs in.
 @login_manager.user_loader
 def load_user(user_id):
-	global users_email
+	global USERS_EMAIL
 	from models import Admin
 	from main import DB, app
 	app.logger.info('LOAD USER, SHOW EMAIL: ' + str(user_id))
-	user = DB.session.query(Admin).get(users_email)
+	user = DB.session.query(Admin).get(USERS_EMAIL)
 	return user
 
 
@@ -53,8 +56,8 @@ def flask_user_authentication(users_email):
 
 @admin_login.route('/')
 def root():
-	if str(request.url) == 'http://admin.stark-wie-ein-baum.de/' or str(request.url) == 'https://admin.stark-wie-ein-baum.de/':
-		return redirect('https://admin.stark-wie-ein-baum.de/app/admin')
+	if str(request.url) == 'http://' + ADMIN_BASE_URL or str(request.url) == 'https://' + ADMIN_BASE_URL:
+		return redirect('https://' + ADMIN_BASE_URL + 'app/admin')
 	else:
 		pass
 
@@ -63,7 +66,7 @@ def admin_home():
 	from main import app
 	if current_user.is_authenticated:
 		app.logger.info('current user: ' + str(current_user))
-		return redirect('https://admin.stark-wie-ein-baum.de/admin')
+		return redirect('https://' + ADMIN_BASE_URL + 'admin')
 	else:
 		return '<a class="button" href="/app/admin/login">Google Login</a>'
 
@@ -83,7 +86,7 @@ def google_login():
 
 @admin_login.route("/app/admin/login/callback")
 def callback():
-	global users_email
+	global USERS_EMAIL
 	from main import app
 	# Get authorization code Google sent back to you
 	code = request.args.get("code")
@@ -110,12 +113,12 @@ def callback():
 	# verification
 	# if userinfo_response.json().get("email_verified"):
 	unique_id = userinfo_response.json()["sub"]
-	users_email = userinfo_response.json()["email"]
+	USERS_EMAIL = userinfo_response.json()["email"]
 	users_name = userinfo_response.json()["given_name"]
-	app.logger.info('GOT USER DATA from /callback: ' + unique_id + ' ' + users_email + ' ' + users_name)
+	app.logger.info('GOT USER DATA from /callback: ' + unique_id + ' ' + USERS_EMAIL + ' ' + users_name)
 
-	if flask_user_authentication(users_email):
-		return redirect('https://admin.stark-wie-ein-baum.de/admin')
+	if flask_user_authentication(USERS_EMAIL):
+		return redirect('https://' + ADMIN_BASE_URL + 'admin')
 	else:
 		return "Sorry. You're Email is not valid.", 400
 
@@ -130,4 +133,4 @@ def logout():
 	DB.session.add(admin)
 	DB.session.commit()
 	logout_user()
-	return redirect('https://admin.stark-wie-ein-baum.de/app/admin')
+	return redirect('https://' + ADMIN_BASE_URL + 'app/admin')
