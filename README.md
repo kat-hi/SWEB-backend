@@ -18,9 +18,18 @@ Administration
 - Admin Interface to manipulate the database
 
 ### docker-compose
+cd SWEB-backend
 ```
 sudo docker-compose build
 sudo docker-compose up
+```
+
+## docker
+cd SWEB_backend/sweb_backend
+
+```
+docker build -t <registryname>/<namespace>/sweb_backend:<tag> -f ../Dockerfile .
+docker push <registryname>/<namespace>/sweb:backend:<tag>
 ```
 
 ## starting in dev mode with virtualenv

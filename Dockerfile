@@ -2,15 +2,15 @@
 FROM python:3.6
 
 # install requirements
-COPY . /start/
+COPY . /sweb_backend/
 
-WORKDIR start
+WORKDIR /sweb_backend/
 
-RUN chmod +x /start/requirements.txt
+RUN chmod +x requirements.txt
 
-RUN pip install -r /start/requirements.txt --no-cache-dir --compile
+RUN pip install -r requirements.txt --no-cache-dir --compile
 
-ENV FLASK_ENV="docker"
+ENV FLASK_ENV="production"
 
 ENV PYTHONUNBUFFERED=1
 

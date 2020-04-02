@@ -2,15 +2,15 @@ import smtplib, ssl
 from _socket import gaierror
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from config import Config
+from sweb_backend.config import Config
 
 PORT = Config.SMTP['PORT']
 SERVER = Config.SMTP['SERVER']
 SENDER = Config.SMTP['SENDER']
 RECEIVER = Config.SMTP['RECEIVER']
 PASSWORD = Config.SMTP['PASSWORD']
-from main import app
 
+from sweb_backend.main import app
 
 def plain_text_mail(firstname, lastname, email, phone, streetaddress, cityaddress, user_message):
 	app.logger.info('PLAINTEXT: ' + firstname + ' ' + lastname + ' ' + email+ ' ' + phone + ' ' + streetaddress + ' ' + cityaddress+ ' ' + user_message)

@@ -1,13 +1,14 @@
-from main import DB
 from sqlalchemy.ext.automap import automap_base
 from flask_login import UserMixin
 from sqlalchemy import create_engine
+from sweb_backend.main import DB
 
 Base = automap_base()
 Base.prepare(DB.engine, reflect=True)
 
-from main import app
+from sweb_backend.main import app
 app.app_context().push()
+
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], pool_pre_ping=True, pool_size=5)
 engine.connect()
 

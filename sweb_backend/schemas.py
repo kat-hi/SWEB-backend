@@ -1,4 +1,4 @@
-from main import MA
+from sweb_backend.main import MA
 
 
 class Tree(MA.TableSchema):

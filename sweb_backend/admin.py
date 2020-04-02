@@ -1,15 +1,15 @@
 from flask_admin import BaseView, expose, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
-import main
+from sweb_backend import main
 from flask_login import current_user
 
 
-# class AuthenticatedView(ModelView):
-# 	def is_accessible(self):
-# 		return current_user.is_authenticated
-#
-# 	def inaccessible_callback(self, name, **kwargs):
-# 		return 'sorry. your not authorized'
+class AuthenticatedView(ModelView):
+	def is_accessible(self):
+		return current_user.is_authenticated
+
+	def inaccessible_callback(self, name, **kwargs):
+		return 'sorry. your not authorized'
 
 
 # class WelcomeView(AdminIndexView):
@@ -24,31 +24,31 @@ from flask_login import current_user
 # 		return self.render('admin/logout.html')
 
 
-class pflanzlistetable(ModelView):
+class pflanzlistetable(AuthenticatedView):
 	main.app.app_context().push()
 	column_display_pk = True
 	can_create = False
 	can_delete = False
 	can_edit = True
 	can_export = True
-	can_set_page_size = 532
+	can_set_page_size = True
 
 
-class obstsortentable(ModelView):
+class obstsortentable(AuthenticatedView):
 	main.app.app_context().push()
 	column_display_pk = True
 	can_create = False
 	can_delete = False
 	can_edit = True
 	can_export = True
-	can_set_page_size = 532
+	can_set_page_size = True
 
 
-class imagetable(ModelView):
+class imagetable(AuthenticatedView):
 	main.app.app_context().push()
 	column_display_pk = True
 	can_create = False
 	can_delete = False
 	can_edit = True
 	can_export = True
-	can_set_page_size = 532
+	can_set_page_size = True

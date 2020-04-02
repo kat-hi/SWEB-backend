@@ -3,13 +3,11 @@ from flask import request, Blueprint
 from flask import jsonify
 import json
 import requests
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
 import re
-api = Blueprint('api', __name__)
-from main import app
 
-limiter = Limiter(app, key_func=get_remote_address, default_limits=['200 per day'])
+api = Blueprint('api', __name__)
+from sweb_backend.main import limiter
+
 
 @api.route('/api', methods=['GET'])
 def index():
@@ -20,8 +18,8 @@ def index():
 @api.route('/api/karte', methods=['GET'])
 @limiter.exempt
 def infos():
-	from main import DB
-	import models, schemas
+	from sweb_backend import models, schemas
+	from sweb_backend.main import DB
 	tree_results = DB.session.query(models.Pflanzliste).all()
 	tree_schema = schemas.Tree(many=True)
 	trees_output = tree_schema.dump(tree_results)
@@ -31,8 +29,8 @@ def infos():
 @api.route('/api/karte/baeume', methods=['GET'])
 @limiter.exempt
 def get_trees():
-	from main import DB
-	import models, schemas
+	from sweb_backend import models, schemas
+	from sweb_backend.main import DB
 	sorten_results = DB.session.query(models.Sorten).all()
 	sorten_schema = schemas.Sorten(many=True)
 	sorten_output = sorten_schema.dump(sorten_results)
@@ -42,8 +40,8 @@ def get_trees():
 @api.route('/api/karte/baeume/<id>', methods=['GET'])
 @limiter.exempt
 def get_tree(id):
-	import schemas, models
-	from main import DB
+	from sweb_backend import schemas, models
+	from sweb_backend.main import DB
 	tree_results = DB.session.query(models.Pflanzliste).get(id)
 	tree_schema = schemas.Tree()
 	tree_output = tree_schema.dump(tree_results)
@@ -53,8 +51,8 @@ def get_tree(id):
 @api.route('/api/karte/baeume/koordinaten', methods=['GET'])
 @limiter.exempt
 def get_coordinates():
-	import schemas, models
-	from main import DB
+	from sweb_backend import schemas, models
+	from sweb_backend.main import DB
 	tree_results = DB.session.query(models.Pflanzliste).all()
 	schema = schemas.Treecoordinates(many=True)
 	output = schema.dump(tree_results)
@@ -64,8 +62,8 @@ def get_coordinates():
 @api.route('/api/karte/baeume/<id>/koordinaten', methods=['GET'])
 @limiter.exempt
 def get_coordinates_of_tree(id):
-	import schemas, models
-	from main import DB
+	from sweb_backend import schemas, models
+	from sweb_backend.main import DB
 	tree_results = DB.session.query(models.Pflanzliste).get(id)
 	schema = schemas.Treecoordinates()
 	output = schema.dump(tree_results)
@@ -75,9 +73,9 @@ def get_coordinates_of_tree(id):
 @api.route('/api/karte/baeume/properties', methods=['GET'])
 @limiter.exempt
 def get_imagelinks():
-	import schemas, models
-	from main import DB
-	from config import Config
+	from sweb_backend import schemas, models
+	from sweb_backend.config import Config
+	from sweb_backend.main import DB, app
 	image_results = DB.session.query(models.Image).all()
 	image_schema = schemas.Image(many=True)
 	image_output = image_schema.dump(image_results)
@@ -98,7 +96,8 @@ def get_imagelinks():
 @api.route('/api/kontakt', methods=['POST'])
 @limiter.limit('10 per hour', override_defaults=False)
 def fetch_contact_information():
-	from mail import log_into_SMTP_Server_and_send_email
+	from sweb_backend.mail import log_into_SMTP_Server_and_send_email
+	from sweb_backend.main import app
 	response = json.loads(request.data.decode('utf-8'))
 	email = str(response['email'])
 	lastname = str(response['lastName'])
@@ -107,6 +106,7 @@ def fetch_contact_information():
 	message = str(response['message'])
 	firstname = str(response['firstName'])
 	phone = str(response['phone'])
-	app.logger.info('API INFO: ' + email + ' ' + lastname + ' ' + firstname + ' ' + cityaddress + ' ' + streetaddress + ' ' + message + ' ' + phone)
+	app.logger.info('MAIL API INFO: ' + email + ' ' + lastname + ' ' + firstname + ' ' + cityaddress + ' ' + streetaddress + ' ' + message + ' ' + phone)
 	log_into_SMTP_Server_and_send_email(firstname, lastname, email, phone, streetaddress, cityaddress, message)
 	return '', 200
+
