@@ -12,7 +12,6 @@ DB = SQLAlchemy()
 MA = Marshmallow()
 AD = Admin(template_mode='bootstrap3')
 login_manager = LoginManager()
-logging.basicConfig(level=logging.DEBUG)
 
 def create_app():
 	app = Flask(__name__)
@@ -22,7 +21,8 @@ def create_app():
 	login_manager.init_app(app)
 	return app
 
-def set_environment():
+
+def set_config_settings():
 	app.config['FLASK_ADMIN_SWATCH'] = 'spacelab'
 	if os.environ['FLASK_ENV'] == 'dev':
 		app.config.from_object('sweb_backend.config.Config')
@@ -30,7 +30,7 @@ def set_environment():
 		app.config.from_object('sweb_backend.config.Production')
 
 
-def create_tables():
+def create_admin_tables():
 	app.app_context().push()
 	from sweb_backend import models
 	from sweb_backend.admin_views import pflanzlistetable, obstsortentable, imagetable
@@ -54,7 +54,9 @@ limiter = Limiter(
 	default_limits=['200 per day']
 )
 
-set_environment()
-create_tables()
+set_config_settings()
+create_admin_tables()
 register_all_blueprints()
+logging.basicConfig(level=logging.DEBUG)
+
 
