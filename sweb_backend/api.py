@@ -1,12 +1,14 @@
-import simplejson
 from flask import request, Blueprint
 from flask import jsonify
 import json
 import requests
 import re
 
-api = Blueprint('api', __name__)
 from sweb_backend.main import limiter
+from sweb_backend.dbservice import DB_SERVICE
+from sweb_backend import models,schemas
+api = Blueprint('api', __name__)
+db_service = DB_SERVICE()
 
 
 @api.route('/api', methods=['GET'])
@@ -18,71 +20,41 @@ def index():
 @api.route('/api/karte', methods=['GET'])
 @limiter.exempt
 def infos():
-	from sweb_backend import models, schemas
-	from sweb_backend.main import DB
-	tree_results = DB.session.query(models.Pflanzliste).all()
-	tree_schema = schemas.Tree(many=True)
-	trees_output = tree_schema.dump(tree_results)
-	return simplejson.dumps(trees_output, ensure_ascii=False, encoding='utf8'), 200
+	return db_service.get_json_data(models.Plantlist, schemas.Tree, id=None)
 
 
 @api.route('/api/karte/baeume', methods=['GET'])
 @limiter.exempt
 def get_trees():
-	from sweb_backend import models, schemas
-	from sweb_backend.main import DB
-	sorten_results = DB.session.query(models.Sorten).all()
-	sorten_schema = schemas.Sorten(many=True)
-	sorten_output = sorten_schema.dump(sorten_results)
-	return simplejson.dumps(sorten_output, ensure_ascii=False, encoding='utf8'), 200
+	return db_service.get_json_data(models.Sorts, schemas.Sorts, id=None)
 
 
 @api.route('/api/karte/baeume/<id>', methods=['GET'])
 @limiter.exempt
 def get_tree(id):
-	from sweb_backend import schemas, models
-	from sweb_backend.main import DB
-	tree_results = DB.session.query(models.Pflanzliste).get(id)
-	tree_schema = schemas.Tree()
-	tree_output = tree_schema.dump(tree_results)
-	return simplejson.dumps(tree_output, ensure_ascii=False, encoding='utf8'), 200
+	return db_service.get_json_data(models.Plantlist, schemas.Tree, id=id)
 
 
 @api.route('/api/karte/baeume/koordinaten', methods=['GET'])
 @limiter.exempt
 def get_coordinates():
-	from sweb_backend import schemas, models
-	from sweb_backend.main import DB
-	tree_results = DB.session.query(models.Pflanzliste).all()
-	schema = schemas.Treecoordinates(many=True)
-	output = schema.dump(tree_results)
-	return simplejson.dumps(output, ensure_ascii=False, encoding='utf8'), 200
+	return db_service.get_json_data(models.Plantlist, schemas.Treecoordinates, id=None)
 
 
 @api.route('/api/karte/baeume/<id>/koordinaten', methods=['GET'])
 @limiter.exempt
 def get_coordinates_of_tree(id):
-	from sweb_backend import schemas, models
-	from sweb_backend.main import DB
-	tree_results = DB.session.query(models.Pflanzliste).get(id)
-	schema = schemas.Treecoordinates()
-	output = schema.dump(tree_results)
-	return simplejson.dumps(output, ensure_ascii=False, encoding='utf8'), 200
+	return db_service.get_json_data(models.Plantlist, schemas.Treecoordinates, id=id)
 
 
+#TODO Refactoring
 @api.route('/api/karte/baeume/properties', methods=['GET'])
 @limiter.exempt
 def get_imagelinks():
-	from sweb_backend import schemas, models
-	from sweb_backend.config import Config
-	from sweb_backend.main import DB, app
-	image_results = DB.session.query(models.Image).all()
-	image_schema = schemas.Image(many=True)
-	image_output = image_schema.dump(image_results)
-	app.logger.info(str(image_output))
-
+	from sweb_backend.main import app
+	image_output = db_service.get_json_data(models.Image, schemas.Image, id=None)
 	checked_files = []
-	base_download_url = Config.IMAGE_BASE_URL
+	base_download_url = app.config['IMAGE_BASE_URL']
 	for image in image_output:
 		regex='lnk/[\w]*'
 		image_id = re.search(regex, image['uri']).group().split('lnk/')[1]
