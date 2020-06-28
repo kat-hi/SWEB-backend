@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sweb-frontend
+  namespace: sachs
+spec:
+  replicas: 1 
+  strategy:
+  template:
+    metadata:
+      labels:
+        app: sweb-frontend
+    spec:
+      containers:
+        - image: registry.datexis.com/ksachs/sweb-frontend:release
+          name: sweb-frontend
+          ports:
+            - name: client-port
+              containerPort: 3000
+      imagePullSecrets:
+        - name:  private-registry-auth
+   

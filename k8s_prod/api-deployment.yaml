@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sweb-backend
+  labels:
+    app: sweb-backend
+    tier: api
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sweb-backend
+        tier: api
+    spec:
+      containers:
+        - name: sweb-backend
+          image: registry.datexis.com/ksachs/sweb-backend:v199
+          ports:
+            - name: client-port
+              containerPort: 5000 
+          envFrom:
+            - configMapRef:
+                name: sweb-backend-config
+          resources:
+            requests:
+              cpu: "1"
+              memory: "16Gi"
+            limits:
+              cpu: "8"
+              memory: "32Gi"
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: private-registry-auth
+  selector:
+    matchLabels:
+      app: sweb-backend
+      tier: api	
