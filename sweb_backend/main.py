@@ -23,17 +23,21 @@ def create_app():
 	return app
 
 def set_environment():
-	app.config['FLASK_ADMIN_SWATCH'] = 'spacelab'
+	app.app_context().push()
+	from .config import Config, Production
 	if os.environ['FLASK_ENV'] == 'dev':
-		app.config.from_object('sweb_backend.config.Config')
+		app.config.from_object(Config())
+		print(app.config['SQLALCHEMY_DATABASE_URI'])
 	else:
-		app.config.from_object('sweb_backend.config.Production')
+		app.config.from_object(Production())
+		print(app.config['SQLALCHEMY_DATABASE_URI'])
+	app.secret_key = Config.SECRETS['SECRET_KEY']
 
 
 def create_tables():
 	app.app_context().push()
-	from sweb_backend import models
-	from sweb_backend.admin_views import pflanzlistetable, obstsortentable, imagetable
+	from . import models
+	from .admin_views import pflanzlistetable, obstsortentable, imagetable
 	AD.add_view(imagetable(models.Image, DB.session))
 	AD.add_view(pflanzlistetable(models.Plantlist, DB.session))
 	AD.add_view(obstsortentable(models.Sorts, DB.session))
@@ -41,8 +45,8 @@ def create_tables():
 
 def register_all_blueprints():
 	app.app_context().push()
-	from sweb_backend.login import admin_login
-	from sweb_backend.api import api
+	from .login import admin_login
+	from .api import api
 	app.register_blueprint(admin_login)
 	app.register_blueprint(api)
 

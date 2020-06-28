@@ -1,9 +1,9 @@
 from flask import request, Blueprint
 from flask import jsonify
 import json
-from sweb_backend.main import limiter
-from sweb_backend import dataservice, dbservice
-from sweb_backend import models, schemas
+from .main import limiter
+from . import dataservice, dbservice
+from . import models, schemas
 
 api = Blueprint('api', __name__)
 
@@ -56,7 +56,7 @@ def get_imagelinks():
 @api.route('/api/kontakt', methods=['POST'])
 @limiter.limit('10 per hour', override_defaults=False)
 def fetch_contact_information():
-	from sweb_backend.mail import connect_to_smtp_server
+	from .mail import connect_to_smtp_server
 	response = json.loads(request.data.decode('utf-8'))
 	connect_to_smtp_server(response)
 	return '', 200

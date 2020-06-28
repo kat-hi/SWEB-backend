@@ -2,7 +2,7 @@ import smtplib, ssl
 from _socket import gaierror
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from sweb_backend.main import app
+from .main import app
 
 PORT = app.config['SMTP_PORT']
 SERVER = app.config['SMTP_SERVER']

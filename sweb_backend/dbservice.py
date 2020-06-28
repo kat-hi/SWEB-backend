@@ -1,5 +1,5 @@
 import simplejson
-from sweb_backend.main import DB
+from .main import DB
 
 
 def _get_model_obj(model, id):

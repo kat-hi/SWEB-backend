@@ -1,6 +1,6 @@
 import requests
 import re
-from sweb_backend.main import app
+from .main import app
 
 
 def extract_values_from_json(response):

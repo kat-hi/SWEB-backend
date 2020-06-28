@@ -4,8 +4,7 @@ from flask import request, redirect, Blueprint, render_template
 import json
 
 admin_login = Blueprint('admin_login', __name__)
-from sweb_backend.config import Config
-from sweb_backend.main import login_manager, app
+from .main import login_manager, app
 
 USERS_EMAIL = ""
 ADMIN_BASE_URL = app.config['ADMIN_BASE_URL']
@@ -22,16 +21,16 @@ def get_google_provider_cfg():
 @login_manager.user_loader
 def load_user(user_id):
 	global USERS_EMAIL
-	from sweb_backend.models import Admins
-	from sweb_backend.main import DB, app
+	from .models import Admins
+	from .main import DB, app
 	app.logger.info('LOAD USER, SHOW EMAIL: ' + str(user_id))
 	user = DB.session.query(Admins).get(USERS_EMAIL)
 	return user
 
 
 def flask_user_authentication(users_email):
-	from sweb_backend.models import Admins
-	from sweb_backend.main import DB, app
+	from .models import Admins
+	from .main import DB, app
 	if users_email == app.config['ADMIN_EMAIL_1'] or users_email == app.config['ADMIN_EMAIL_2']:
 		admin = DB.session.query(Admins).get(users_email)
 		admin.authenticated = 'true'
@@ -55,7 +54,7 @@ def root():
 
 @admin_login.route('/app/admin')
 def admin_home():
-	from sweb_backend.main import app
+	from .main import app
 	if current_user.is_authenticated:
 		app.logger.info('current user: ' + str(current_user))
 		return redirect('https://' + ADMIN_BASE_URL + 'admin')
@@ -79,7 +78,7 @@ def google_login():
 @admin_login.route("/app/admin/login/callback")
 def callback():
 	global USERS_EMAIL
-	from sweb_backend.main import app
+	from .main import app
 	# Get authorization code Google sent back to you
 	code = request.args.get("code")
 	google_provider_cfg = get_google_provider_cfg()
@@ -120,7 +119,7 @@ def callback():
 @admin_login.route("/app/admin/logout")
 @login_required
 def logout():
-	from sweb_backend.main import DB, app
+	from .main import DB, app
 	app.logger.info('logout')
 	admin = current_user
 	admin.authenticated = False
