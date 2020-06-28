@@ -11,7 +11,7 @@ https://www.hof-grueneberg.de/stiftung/stiftung-hof-grueneberg/
 #### functionality
 App
 - Database-Api (mysql-db)
-- Email-Transfer via smtp from form to client-email
+- smtp
 
 Administration
 - Authentication via OAuth2.0 (Google Login)
@@ -32,8 +32,8 @@ docker build -t <registryname>/<namespace>/sweb_backend:<tag> -f ../Dockerfile .
 docker push <registryname>/<namespace>/sweb:backend:<tag>
 ```
 
-## starting in dev mode with virtualenv
-on linux
+## starting in dev mode with virtualenv + local mysqldb
+unix:
 
 ```
 cd api
@@ -42,8 +42,6 @@ source .env
 export FLASK_ENV=dev
 flask run
 ```
-
-The flask-server runs on http://127.0.0.1:5000
 
 ### note
 this repo is a copy of our private project.
