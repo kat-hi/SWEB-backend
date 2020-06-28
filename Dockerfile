@@ -2,9 +2,9 @@
 FROM python:3.6
 
 # install requirements
-COPY . /sweb_backend/
+COPY . sweb_backend/
 
-WORKDIR /sweb_backend/
+WORKDIR sweb_backend
 
 RUN chmod +x requirements.txt
 
