@@ -3,16 +3,17 @@ from _socket import gaierror
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from .main import app
+from .config import Config
 
-PORT = app.config['SMTP_PORT']
-SERVER = app.config['SMTP_SERVER']
-SENDER = app.config['SENDER_EMAIL']
-RECEIVER = app.config['RECEIVER_EMAIL']
-PASSWORD = app.config['SMTP_PASSWORD']
+PORT = Config.SMTP['PORT']
+SERVER = Config.SMTP['SERVER']
+SENDER = Config.SMTP['SENDER']
+RECEIVER = Config.SMTP['RECEIVER']
+PASSWORD = Config.SMTP['PASSWORD']
 
 
 def _plain_text_mail(data):
-	return 'Absender:\n' + data['firstname'] + ' ' + data['lastname'] + '\n' \
+	return 'Absender:\n' + data['firstName'] + ' ' + data['lastName'] + '\n' \
 		+ data['streetAddress'] + '\n' + data['cityAddress'] + '\n' + data['email'] + '\n' \
 		+ 'Tel: ' + data['phone'] + '\n\n' + 'Nachricht:\n' + data['message']
 
@@ -21,7 +22,7 @@ def connect_to_smtp_server(datalist):
 	app.logger.info('LOGINTO: ' + str(datalist))
 	message = MIMEMultipart("alternative")
 	message["Subject"] = "Anfrage: Baumpatenschaft"
-	message["From"] = RECEIVER
+	message["From"] = datalist['email']
 	message["To"] = RECEIVER
 	part1 = MIMEText(_plain_text_mail(datalist), "plain")
 	message.attach(part1)
