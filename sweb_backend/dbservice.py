@@ -1,10 +1,14 @@
 import simplejson
 from .main import DB
+from sqlalchemy import exc
 
 
 def _get_model_obj(model, id):
 	if id is None:
-		return DB.session.query(model)
+		try:
+			return DB.session.query(model)
+		except exc.InvalidRequestError as e:
+			print('invalid request error: {}'.format(e))
 	else:
 		return DB.session.query(model).get(id)
 
