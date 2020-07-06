@@ -44,7 +44,6 @@ def get_coordinates_of_tree(id):
 	return dbservice.get_json_data(models.Plantlist, schemas.Treecoordinates, id=id)
 
 
-# TODO Refactoring
 @api.route('/api/karte/baeume/properties', methods=['GET'])
 @limiter.exempt
 def get_imagelinks():
