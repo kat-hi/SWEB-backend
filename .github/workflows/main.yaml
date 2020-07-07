@@ -41,4 +41,4 @@ jobs:
         with:
           version: 'latest'
       - name: Restart sweb-prod pod
-        run: kubectl -n sachs delete pod -l app=sweb-backend-dev
+        run: kubectl -n sachs delete pod -l app=sweb-backend
