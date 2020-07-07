@@ -24,6 +24,7 @@ sudo docker-compose build
 sudo docker-compose up
 ```
 
+
 ## docker
 cd SWEB_backend/sweb_backend
 
@@ -47,7 +48,6 @@ flask run
 this repo is a copy of our private project.
 
 frontend developer: wkrl (https://github.com/wkrl/Stark-Wie-Ein-Baum)
-
 
 ### current domains
 
