@@ -49,7 +49,6 @@ this repo is a copy of our private project.
 
 frontend developer: wkrl (https://github.com/wkrl/Stark-Wie-Ein-Baum)
 
-
 ### current domains
 
 swebapi.demo.datexis.com (api baseurl used by frontend)
