@@ -10,7 +10,7 @@ api = Blueprint('api', __name__)
 
 @api.route('/api', methods=['GET'])
 def index():
-	response = jsonify({'json sagt': 'Hallo i bims. der json.'})
+	response = jsonify({'json sagt': 'Hallo i bims. der neue json.'})
 	return response, 200
 
 
