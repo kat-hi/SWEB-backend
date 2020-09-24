@@ -4,8 +4,8 @@ from flask import request, redirect, Blueprint, render_template
 import json
 
 admin_login = Blueprint('admin_login', __name__)
-from .main import login_manager, app
-from .config import Config
+from main import login_manager, app
+from config import Config
 
 USERS_EMAIL = ""
 ADMIN_BASE_URL = Config.ADMIN_BASE_URL

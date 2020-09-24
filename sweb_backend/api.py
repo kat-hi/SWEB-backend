@@ -1,16 +1,22 @@
 from flask import request, Blueprint
 from flask import jsonify
 import json
-from .main import limiter
-from . import dataservice, dbservice
-from . import models, schemas
+from main import limiter
+import dataservice, dbservice
+import models, schemas
 
 api = Blueprint('api', __name__)
 
 
-@api.route('/api', methods=['GET'])
+@api.route('/', methods=['GET'])
 def index():
-	response = jsonify({'json sagt': 'Hallo i bims. der neue json.'})
+	response = jsonify({'json sagt': 'Hallo i bims. der json.'})
+	return response, 200
+
+
+@api.route('/api', methods=['GET'])
+def json():
+	response = jsonify({'json sagt': 'Hallo i bims. der andere json.'})
 	return response, 200
 
 

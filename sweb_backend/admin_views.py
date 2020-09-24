@@ -1,5 +1,5 @@
 from flask_admin.contrib.sqla import ModelView
-from . import main
+import main
 from flask_login import current_user
 
 

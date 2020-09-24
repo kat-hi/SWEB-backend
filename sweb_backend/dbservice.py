@@ -1,5 +1,5 @@
 import simplejson
-from .main import DB
+from main import DB
 from sqlalchemy import exc
 
 

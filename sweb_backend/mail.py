@@ -2,8 +2,8 @@ import smtplib, ssl
 from _socket import gaierror
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from .main import app
-from .config import Config
+from main import app
+from config import Config
 
 PORT = Config.SMTP['PORT']
 SERVER = Config.SMTP['SERVER']
