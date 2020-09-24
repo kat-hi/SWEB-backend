@@ -1,7 +1,8 @@
 import requests
 import re
-from .main import app
-from .config import Config
+from main import app
+from config import Config
+
 
 def extract_values_from_json(response):
 	email = str(response['email'])
