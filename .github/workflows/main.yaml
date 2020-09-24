@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
       - name: Publish to Docker registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
@@ -49,7 +49,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        if: github.event_name == 'pull_request'
+        if: ${{ github.event_name == 'pull_request'}}
       - name: Publish to Docker registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
