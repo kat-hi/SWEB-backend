@@ -23,11 +23,12 @@ jobs:
       - name: run Unittest
         run: python -m unittest discover tests/
 
-  PUBLISH:
+  PROD-PUBLISH:
     runs-on: self-hosted
 
     steps:
       - uses: actions/checkout@v2
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       - name: Publish to Docker registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
@@ -42,3 +43,24 @@ jobs:
           version: 'latest'
       - name: Restart sweb-prod pod
         run: kubectl -n sachs delete pod -l app=sweb-backend
+
+  DEV-PUBLISH:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+        if: github.event_name == 'pull_request'
+      - name: Publish to Docker registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: registry.datexis.com/ksachs/sweb-backend:latest
+          username: ${{ secrets.DOCKER_REGISTRY_USER }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASSPHRASE }}
+          registry: registry.datexis.com
+          snapshot: true
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v1
+        with:
+          version: 'latest'
+      - name: Restart sweb-dev pod
+        run: kubectl -n sachs delete pod -l app=sweb-backend-dev
