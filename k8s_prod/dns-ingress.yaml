@@ -16,7 +16,7 @@ spec:
   - host: "admin.stark-wie-ein-baum.de"
     http:
       paths:
-      - path: 
+      - path:
         backend:
           serviceName: swebapi-service
           servicePort: 5000

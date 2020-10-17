@@ -15,7 +15,7 @@ def index():
 
 
 @api.route('/api', methods=['GET'])
-def json():
+def jason():
 	response = jsonify({'json sagt': 'Hallo i bims. der andere json.'})
 	return response, 200
 
@@ -61,7 +61,8 @@ def get_imagelinks():
 @api.route('/api/kontakt', methods=['POST'])
 @limiter.limit('10 per hour', override_defaults=False)
 def fetch_contact_information():
-	from .mail import connect_to_smtp_server
+	from mail import connect_to_smtp_server
+	print(json.loads(request.data.decode('utf-8')))
 	response = json.loads(request.data.decode('utf-8'))
 	connect_to_smtp_server(response)
 	return '', 200

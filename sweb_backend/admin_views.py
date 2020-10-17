@@ -9,7 +9,7 @@ class AuthenticatedView(ModelView):
 		return current_user.is_authenticated
 
 	def inaccessible_callback(self, name, **kwargs):
-		return 'sorry. your not authorized'
+		return "sorry. you're not authorized"
 
 
 class pflanzlistetable(AuthenticatedView):

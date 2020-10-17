@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sweb-backend
+  namespace: sachs
   labels:
     app: sweb-backend
     tier: api
@@ -15,23 +16,19 @@ spec:
     spec:
       containers:
         - name: sweb-backend
-          image: registry.datexis.com/ksachs/sweb-backend:v199
+          image: registry.datexis.com/ksachs/sweb-backend-prod:v7
           ports:
             - name: client-port
               containerPort: 5000 
           envFrom:
             - configMapRef:
                 name: sweb-backend-config
-          resources:
-            requests:
-              cpu: "1"
-              memory: "16Gi"
-            limits:
-              cpu: "8"
-              memory: "32Gi"
       restartPolicy: Always
       imagePullSecrets:
         - name: private-registry-auth
+      priorityClassName: important
+      nodeSelector:
+        cpu: opteron-6378
   selector:
     matchLabels:
       app: sweb-backend

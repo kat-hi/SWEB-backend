@@ -8,6 +8,8 @@ def _get_model_obj(model, id):
 		try:
 			return DB.session.query(model)
 		except exc.InvalidRequestError as e:
+			DB.session.rollback()
+			DB.session.remove()
 			print('invalid request error: {}'.format(e))
 	else:
 		return DB.session.query(model).get(id)
